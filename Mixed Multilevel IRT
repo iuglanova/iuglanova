@@ -1,0 +1,63 @@
+install.packages("xlsx")
+library(xlsx)
+
+install.packages("MultiLCIRT")
+library(MultiLCIRT)
+
+setwd("C:\\Users\\iuglanova\\Desktop\\clan\\ipips")
+datipips <- read.xlsx("data_1grade_Novosib.xlsx",header=T,1)
+datipips <- as.data.frame(datipips)
+datipips <- datipips[complete.cases(datipips),]
+str(datipips)
+
+# 1st argument Y - matrix of answers
+Y <- datipips[,c(17:27)]
+Y <- matrix(as.numeric(unlist(Y)),nrow=nrow(Y))
+Y <- Y-1 # for 0s in the matrix
+str(Y)
+min(Y)
+# 2nd argument kU - number of support points (or latent classes at cluster level)
+# 3rd argument kV - number of ability levels (or latent classes at individual level)
+
+# 5argument X - matrix of covariates that affects the weights at individual level
+X <- datipips[,3] #gender
+X <- c(sapply(X, as.numeric))
+str(X)
+# 6argument clust - vector of cluster indicator for each unit  
+
+# clutered by teachers
+clust_teacher <- datipips[,10]
+clust_teacher <- c(sapply(clust_teacher, as.numeric))
+str(clust_teacher)
+# or
+
+# clutered by schools
+clust_school <- datipips[,5]
+clust_school <- c(sapply(clust_school, as.numeric))
+str(clust_school)
+
+# link 2 = local logits, Partial Credit results 
+# disc - 0 Rasch
+# difl - indicator of constraints on the difficulty levels (0 = free, 1 = rating scale parameterization)
+
+# 2nd level - SCHOOL, covariate for 1st lvl 
+i_school_u2_v2_cov <-  est_multi_poly_clust(Y,kU=2,kV=2,X=X,clust=clust_school,link=2, disc=0, difl=0, disp=TRUE,output=TRUE)
+summary.est_multi_poly_clust(i_school_u2_v2_cov)
+
+# 2nd level - Teacher, covariate for 1st lvl 
+i_t_u2_v2_cov <-  est_multi_poly_clust(Y,kU=2,kV=2,X=X,clust=clust_teacher,link=2, disc=0, difl=0, disp=TRUE,output=TRUE)
+summary.est_multi_poly_clust(i_t_u2_v2_cov)
+
+compare_models(i_school_u2_v2_cov,i_t_u2_v2_cov)
+
+
+
+cov_school <- data_ipips[,c(7)]
+cov_school <- cbind(cov_school,clust_school)
+out = aggr_data(cov_school)
+View(out)
+length(out$data_dis)
+S <- out$data_dis
+W <- S[,2]
+W <- c(sapply(W, as.numeric))
+str(W)
