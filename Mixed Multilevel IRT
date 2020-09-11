@@ -51,13 +51,38 @@ summary.est_multi_poly_clust(i_t_u2_v2_cov)
 compare_models(i_school_u2_v2_cov,i_t_u2_v2_cov)
 
 
+# Covariates at 2 lvl 
 
-cov_school <- data_ipips[,c(7)]
+cov_school <- datipips[,c(7)] #Urban(1)/Rural(0)
 cov_school <- cbind(cov_school,clust_school)
 out = aggr_data(cov_school)
 View(out)
 length(out$data_dis)
 S <- out$data_dis
-W <- S[,2]
-W <- c(sapply(W, as.numeric))
+W <- S[,1]
+W <- c(sapply(W, as.numeric)) # matrix of covariates that affects the weights at cluster level
 str(W)
+
+cov_teacher <- datipips[,c(7)] #Urban(1)/Rural(0)
+cov_teacher <- cbind(cov_teacher,clust_teacher)
+out2 = aggr_data(cov_teacher)
+View(out2)
+length(out2$data_dis)
+S2 <- out2$data_dis
+W2 <- S2[,1]
+W2 <- c(sapply(W2, as.numeric)) # matrix of covariates that affects the weights at cluster level
+str(W2)
+
+
+
+
+# 2nd level - SCHOOL, covariate for 1st lvl  and 2ns lvl
+i_school_u2_v2_cov_W <-  est_multi_poly_clust(Y,kU=2,kV=2,X=X,W=W,clust=clust_school,link=2, disc=0, difl=0, disp=TRUE,output=TRUE)
+summary.est_multi_poly_clust(i_school_u2_v2_cov_W)
+
+# 2nd level - Teacher, covariate for 1st lvl 
+i_t_u2_v2_cov_W <-  est_multi_poly_clust(Y,kU=2,kV=2,X=X,W=W2,clust=clust_teacher,link=2, disc=0, difl=0, disp=TRUE,output=TRUE)
+summary.est_multi_poly_clust(i_t_u2_v2_cov_W)
+
+compare_models(i_school_u2_v2_cov_W,i_t_u2_v2_cov_W)
+
