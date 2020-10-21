@@ -1,0 +1,15 @@
+
+library("xlsx")
+setwd("C:/Users/home_/Desktop/4K/aquarium")
+write.xlsx(realized.SMBC.matrix , file = "realizedSMBC R 22 obs.xlsx", sheetName = "Sheet1", 
+           col.names = TRUE, row.names = TRUE, append = FALSE)
+realized.SMBC.matrix 
+
+p.value.SMBC.matrix
+write.xlsx(p.value.SMBC.matrix , file = "p.value.SMBC.matrix R 22 obs.xlsx", sheetName = "Sheet1", 
+           col.names = TRUE, row.names = TRUE, append = FALSE)
+
+
+
+write.xlsx(postpred.SMBC.matrix , file = "postpred SMBC R 22 obs cntx.xlsx", sheetName = "Sheet1", 
+           col.names = TRUE, row.names = TRUE, append = FALSE)
