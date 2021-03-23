@@ -1,0 +1,37 @@
+library(mirt)
+library(xlsx)
+library(psych)
+library(haven)
+library(TAM)
+
+
+setwd("C:/Users/iuglanova/Documents/SWB")
+
+
+# Fifth
+
+fifth_all_i  <- read.csv("sber20_soft_skills.csv",na="#N/A")
+
+fifth <- read.csv2("fifth_cg.csv")
+describe(fifth)
+
+# recode
+fifth$wb_sch_aff_2 <- 3-fifth$wb_sch_aff_2
+fifth$wb_sch_aff_3 <- 3-fifth$wb_sch_aff_3
+
+
+# Multidimensional model per class -----
+
+Q <- matrix(0, ncol=4, nrow=23)
+Q[1:8,1] <- Q[9:11,2] <- Q[12:17,3] <- Q[18:23,4] <- 1
+rownames(Q) <- colnames(items)
+colnames(Q) <- c("D1","D2","D3","D4")
+Q
+
+
+multi_fifth_2 <- tam.mml.mfr(resp=fifth[3:25], Q=Q, ndim=4, 
+                                control=list(snodes=3000, maxiter=10000))
+summary(multi_fifth_rsm)
+
+multi_fifth_rsm_fit <- TAM::tam.fit(multi_fifth_rsm)
+summary(multi_fifth_rsm_fit)
