@@ -35,3 +35,18 @@ summary(multi_fifth_rsm)
 
 multi_fifth_rsm_fit <- TAM::tam.fit(multi_fifth_rsm)
 summary(multi_fifth_rsm_fit)
+
+
+
+
+dim1r <- secondary_items[,c(3:10)]
+dim2r <- secondary_items[,c(11:13)]
+
+dim4r <- secondary_items[,c(20:25)]
+
+
+rawsum_1 <- rowSums(dim1r,na.rm=T)
+rawsum_2 <- rowSums(dim2r,na.rm=T)
+rawsum_4 <- rowSums(dim4r,na.rm=T)
+
+cor(rawsum_4,rawsum_1)
