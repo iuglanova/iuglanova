@@ -1,0 +1,30 @@
+library(xlsx)
+library(psych)
+library(ggplot2)
+library(magrittr)
+library(Hmisc)
+
+
+setwd("C:/Users/Svaneti/OneDrive/Документы/Проекты/RespTime")
+
+stroop_full_data <- read.xlsx2("Stroop_data_math_row.xlsx",1)
+
+stroop_score <-  stroop_full_data[seq(4, ncol(stroop_full_data), 3) ]
+stroop_score <- stroop_score[-c(61,62)]
+stroop_score <- as.numeric(stroop_score)
+str(stroop_score) 
+# st_42_correct difficulty 0.77
+# st_48_correct difficulty 0.74
+
+stroop_score <- data.frame(sapply(stroop_score, function(x) as.numeric(as.character(x))))
+sapply(stroop_score, class)
+
+stroop_time <- stroop_full_data[seq(5, ncol(stroop_full_data), 3) ]
+stroop_time <- stroop_time[-c(61)]
+stroop_time <- data.frame(sapply(stroop_time, function(x) as.numeric(as.character(x))))
+
+str(stroop_time)
+hist.data.frame(stroop_time_log)
+
+stroop_time_log <- log(stroop_time)
+
